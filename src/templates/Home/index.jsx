@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useDebugValue, useEffect, useState } from 'react';
 
 const useMediaQuery = (queryValue, initialValue = false) => {
   const [match, setMatch] = useState(initialValue);
+
+  useDebugValue(`Query: ${queryValue}`, (name) => {
+    return name + ' modificado';
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -24,14 +28,13 @@ const useMediaQuery = (queryValue, initialValue = false) => {
   return match;
 };
 
-const Home = () => {
+export const Home = () => {
   const huge = useMediaQuery('(min-width: 980px)');
-  const small = useMediaQuery('(max-width: 979px)');
-  const background = huge ? 'green' : small ? 'red' : null;
+  const big = useMediaQuery('(max-width: 979px) and (min-width: 768px)');
+  const medium = useMediaQuery('(max-width: 767px) and (min-width: 321px)');
+  const small = useMediaQuery('(max-width: 321px)');
 
-  console.log(background, huge);
+  const background = huge ? 'green' : big ? 'red' : medium ? 'yellow' : small ? 'purple' : null;
 
   return <div style={{ fontSize: '60px', background }}>Oi</div>;
 };
-
-export default Home;
